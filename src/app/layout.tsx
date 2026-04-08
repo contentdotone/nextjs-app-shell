@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { AppShell } from "@/components/AppShell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,7 +35,7 @@ export default function RootLayout({
           src="https://cdn.jsdelivr.net/gh/contentdotone/app-sdk-temp@main/app-sdk.min.js"
           strategy="beforeInteractive"
         />
-        {children}
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

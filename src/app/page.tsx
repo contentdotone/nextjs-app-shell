@@ -1,8 +1,8 @@
 "use client";
 
-import { useZestySDK } from "@/hooks/useZestySDK";
+import { useInstance } from "@/context/InstanceContext";
 
-const statusLabel: Record<string, string> = {
+const sdkStatusLabel: Record<string, string> = {
   idle: "Idle",
   initializing: "Connecting…",
   connected: "Connected",
@@ -10,7 +10,7 @@ const statusLabel: Record<string, string> = {
   error: "Error",
 };
 
-const statusColor: Record<string, string> = {
+const sdkStatusColor: Record<string, string> = {
   idle: "bg-zinc-400",
   initializing: "bg-yellow-400 animate-pulse",
   connected: "bg-green-500",
@@ -19,25 +19,30 @@ const statusColor: Record<string, string> = {
 };
 
 export default function Home() {
-  const sdk = useZestySDK();
+  const { sdk, instanceName, instanceZUID, isIframe } = useInstance();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white dark:bg-black">
+    <div className="flex flex-1 flex-col items-center justify-center bg-white">
       <main className="flex flex-col items-center gap-6 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-black dark:text-white">
+        <h1 className="text-4xl font-bold tracking-tight text-[var(--fg-primary)]">
           Content.One App
         </h1>
-        <p className="text-lg text-zinc-500 dark:text-zinc-400">Coming soon.</p>
 
-        <div className="flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 px-4 py-2 text-sm text-zinc-600 dark:text-zinc-400">
-          <span
-            className={`h-2 w-2 rounded-full ${statusColor[sdk.status]}`}
-          />
+        {instanceName ? (
+          <p className="text-lg text-[var(--fg-secondary)]">{instanceName}</p>
+        ) : (
+          <p className="text-lg text-[var(--fg-tertiary)]">Coming soon.</p>
+        )}
+
+        {instanceZUID && (
+          <p className="text-xs font-mono text-[var(--fg-disabled)]">{instanceZUID}</p>
+        )}
+
+        <div className="flex items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2 text-sm text-[var(--fg-tertiary)]">
+          <span className={`h-2 w-2 rounded-full ${sdkStatusColor[sdk.status]}`} />
           <span>
-            Zesty SDK&nbsp;&mdash;&nbsp;{statusLabel[sdk.status]}
-            {sdk.status === "connected" && sdk.instanceZUID
-              ? ` · ${sdk.instanceZUID}`
-              : ""}
+            Zesty SDK&nbsp;&mdash;&nbsp;{sdkStatusLabel[sdk.status]}
+            {isIframe ? " · iframe" : " · standalone"}
           </span>
         </div>
       </main>
