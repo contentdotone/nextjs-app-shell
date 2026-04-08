@@ -1,0 +1,34 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/nextjs-app-shell:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/nextjs-app-shell:latest'
+      - '.'
+
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - '--all-tags'
+      - 'gcr.io/$PROJECT_ID/nextjs-app-shell'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - nextjs-app-shell
+      - '--image=gcr.io/$PROJECT_ID/nextjs-app-shell:$COMMIT_SHA'
+      - '--region=us-east4'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+
+images:
+  - 'gcr.io/$PROJECT_ID/nextjs-app-shell:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/nextjs-app-shell:latest'
