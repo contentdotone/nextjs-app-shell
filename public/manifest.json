@@ -1,0 +1,32 @@
+{
+  "name": "Content.One App",
+  "short_name": "App",
+  "description": "A Next.js starter template for building apps in the Content.One/Zesty.io ecosystem. Includes App SDK integration, SSO login, instance switching, and Cloud Run deployment.",
+  "version": "1.0.0",
+  "author": "Content.One",
+  "publisher": "Content.One",
+  "target_audience": "Developers building custom apps for the Zesty.io/Content.One platform",
+  "cost": "Free",
+  "icon": "https://hj5v68xn.media.zestyio.com/content-one_brand-mark-royal-blue.svg",
+  "docs_url": "/docs",
+  "app_url": "/",
+  "login_url": "/login",
+  "screenshots": [],
+  "features": [
+    "Next.js App Router with TypeScript",
+    "Zesty App SDK integration for iframe embedding",
+    "Instance switcher with multi-instance support",
+    "SSO authentication (Google, GitHub, Microsoft)",
+    "Manual APP_SID token login",
+    "Server-side API proxy for Zesty APIs",
+    "i18n support (English, Spanish, Dutch)",
+    "Dockerfile for Google Cloud Run",
+    "Cloud Build configuration"
+  ],
+  "integrations": {
+    "zesty_app_sdk": true,
+    "sso_providers": ["google", "github", "microsoft"],
+    "deployment": "google_cloud_run"
+  },
+  "repository": "https://github.com/contentdotone/nextjs-app-shell"
+}
