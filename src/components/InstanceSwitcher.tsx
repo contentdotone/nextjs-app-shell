@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInstance, type Instance } from "@/context/InstanceContext";
+import { useT } from "@/i18n";
 
 function ChevronDown() {
   return (
@@ -50,6 +51,7 @@ function InstanceRow({
 export function InstanceSwitcher() {
   const { instanceZUID, instanceName, instances, loadingInstances, switchInstance } =
     useInstance();
+  const { t } = useT();
 
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -83,22 +85,29 @@ export function InstanceSwitcher() {
     }
   }, [open]);
 
+  const triggerLabel = instanceName
+    ?? (loadingInstances ? t("instance.loading") : t("instance.select"));
+
+  const countLabel = query
+    ? t("instance.filteredCount", { filtered: filtered.length, total: instances.length })
+    : instances.length === 1
+      ? t("instance.count", { count: 1 })
+      : t("instance.countPlural", { count: instances.length });
+
   return (
     <div ref={containerRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-1.5 text-sm font-medium text-white transition-colors max-w-[220px]"
-        aria-label="Switch instance"
+        aria-label={t("instance.switcherLabel")}
       >
-        <span className="truncate">
-          {instanceName ?? (loadingInstances ? "Loading…" : "Select instance")}
-        </span>
+        <span className="truncate">{triggerLabel}</span>
         <ChevronDown />
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full mt-1 z-50 w-72 rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-sm)] overflow-hidden">
+        <div className="absolute right-0 top-full mt-1 z-50 w-72 rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-sm)] overflow-hidden">
           {/* Search */}
           <div className="flex items-center gap-2 px-3 py-2 border-b border-[var(--border)]">
             <SearchIcon />
@@ -107,7 +116,7 @@ export function InstanceSwitcher() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search instances…"
+              placeholder={t("instance.searchPlaceholder")}
               className="flex-1 text-sm text-[var(--fg-primary)] placeholder:text-[var(--fg-disabled)] outline-none bg-transparent"
             />
           </div>
@@ -115,9 +124,7 @@ export function InstanceSwitcher() {
           {/* Count */}
           {instances.length > 0 && (
             <div className="px-3 py-1 text-[10px] text-[var(--fg-tertiary)] border-b border-[var(--border)]">
-              {query
-                ? `${filtered.length} of ${instances.length} instances`
-                : `${instances.length} instance${instances.length !== 1 ? "s" : ""}`}
+              {countLabel}
             </div>
           )}
 
@@ -125,11 +132,11 @@ export function InstanceSwitcher() {
           <div className="max-h-60 overflow-y-auto">
             {loadingInstances ? (
               <p className="px-3 py-4 text-sm text-[var(--fg-tertiary)] text-center">
-                Loading…
+                {t("instance.loading")}
               </p>
             ) : filtered.length === 0 ? (
               <p className="px-3 py-4 text-sm text-[var(--fg-tertiary)] text-center">
-                {query ? "No matches" : "No instances found"}
+                {query ? t("instance.noMatches") : t("instance.noInstances")}
               </p>
             ) : (
               filtered.map((inst) => (

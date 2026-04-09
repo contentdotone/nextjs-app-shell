@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useT } from "@/i18n";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -59,11 +60,11 @@ function SSOButton({
 
 // ─── Divider ─────────────────────────────────────────────────────────────────
 
-function Divider() {
+function Divider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3">
       <div className="flex-1 h-px bg-[var(--border)]" />
-      <span className="text-xs text-[var(--fg-tertiary)]">or</span>
+      <span className="text-xs text-[var(--fg-tertiary)]">{label}</span>
       <div className="flex-1 h-px bg-[var(--border)]" />
     </div>
   );
@@ -73,6 +74,7 @@ function Divider() {
 
 function ManualLoginSection() {
   const router = useRouter();
+  const { t } = useT();
   const [token, setToken] = useState("");
 
   function handleStart(e: React.FormEvent) {
@@ -87,10 +89,10 @@ function ManualLoginSection() {
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-0.5">
         <p className="text-xs font-semibold text-[var(--fg-secondary)] uppercase tracking-wide">
-          Manual login
+          {t("login.manualTitle")}
         </p>
         <p className="text-xs text-[var(--fg-tertiary)]">
-          Paste an APP_SID token to sign in directly
+          {t("login.manualDescription")}
         </p>
       </div>
       <form onSubmit={handleStart} className="flex gap-2">
@@ -98,7 +100,7 @@ function ManualLoginSection() {
           type="text"
           value={token}
           onChange={(e) => setToken(e.target.value)}
-          placeholder="APP_SID token"
+          placeholder={t("login.tokenPlaceholder")}
           className="flex-1 min-w-0 rounded-lg border border-[var(--border)] px-3 py-2 text-sm text-[var(--fg-primary)] placeholder:text-[var(--fg-disabled)] outline-none focus:ring-2 focus:ring-[var(--brand-600)] focus:border-transparent transition font-mono"
         />
         <button
@@ -106,7 +108,7 @@ function ManualLoginSection() {
           disabled={!token.trim()}
           className="shrink-0 px-4 py-2 rounded-lg border border-[var(--border-strong)] bg-white shadow-[var(--shadow-xs)] ring-1 ring-black/[.06] ring-inset text-[var(--fg-secondary)] text-sm font-semibold hover:bg-[var(--bg-secondary)] transition-colors disabled:opacity-40"
         >
-          Start
+          {t("login.start")}
         </button>
       </form>
     </div>
@@ -117,9 +119,8 @@ function ManualLoginSection() {
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useT();
 
-  // If running inside the Zesty Manager shell (iframe), skip login —
-  // the ZestySDK handles auth via postMessage from the parent window.
   useEffect(() => {
     if (window.self !== window.top) {
       router.replace("/");
@@ -136,10 +137,10 @@ export default function LoginPage() {
             <img src="/content-one-logo.svg" alt="Content.One" width={40} height={40} />
           </div>
           <h1 className="text-2xl font-semibold text-[var(--fg-primary)]">
-            Content.One App
+            {t("login.title")}
           </h1>
           <p className="text-sm text-[var(--fg-secondary)] mt-1">
-            Sign in to continue
+            {t("login.subtitle")}
           </p>
         </div>
 
@@ -151,21 +152,21 @@ export default function LoginPage() {
             <SSOButton
               href="https://auth.api.zesty.io/google/login"
               icon={<GoogleIcon />}
-              label="Continue with Google"
+              label={t("login.google")}
             />
             <SSOButton
               href="https://auth.api.zesty.io/github/login"
               icon={<GitHubIcon />}
-              label="Continue with GitHub"
+              label={t("login.github")}
             />
             <SSOButton
               href="https://auth.api.zesty.io/azure/login"
               icon={<MicrosoftIcon />}
-              label="Continue with Microsoft"
+              label={t("login.microsoft")}
             />
           </div>
 
-          <Divider />
+          <Divider label={t("login.or")} />
 
           <ManualLoginSection />
         </div>
