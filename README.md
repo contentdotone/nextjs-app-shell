@@ -178,6 +178,64 @@ gcloud run deploy my-app \
 
 ---
 
+## App Manifest
+
+The shell includes a `public/manifest.json` that describes the app to the Content.One/Zesty.io ecosystem. It is served at `/manifest.json` with no authentication required and is used by the marketplace and app installer to display app metadata.
+
+**When you customize this template, update `public/manifest.json` with your app's real values before deploying.**
+
+### Fields
+
+| Field | Description |
+|---|---|
+| `name` | Full display name of the app |
+| `short_name` | Short name for compact display |
+| `description` | What the app does — shown in the marketplace |
+| `version` | Semver version string (e.g. `"1.0.0"`) |
+| `author` | Individual or team who built the app |
+| `publisher` | Organization publishing the app |
+| `target_audience` | Who the app is intended for |
+| `cost` | Pricing (e.g. `"Free"`) |
+| `icon` | URL to the app icon (SVG or PNG, publicly accessible) |
+| `docs_url` | Path or URL to the app's documentation |
+| `app_url` | Root path of the app (usually `"/"`) |
+| `login_url` | Path to the login page (usually `"/login"`) |
+| `screenshots` | Array of `{ src, label, description }` objects for marketplace display |
+| `features` | Array of feature strings describing what the app does |
+| `integrations` | Object describing SDK usage, SSO providers, and deployment target |
+| `repository` | GitHub (or other) repo URL |
+
+### Example
+
+```json
+{
+  "name": "My App",
+  "short_name": "MyApp",
+  "description": "Does something useful for Zesty.io content teams.",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "publisher": "Your Org",
+  "target_audience": "Content editors",
+  "cost": "Free",
+  "icon": "https://example.com/icon.svg",
+  "docs_url": "/docs",
+  "app_url": "/",
+  "login_url": "/login",
+  "screenshots": [
+    { "src": "/screenshots/home.jpg", "label": "Home", "description": "Main dashboard" }
+  ],
+  "features": ["Feature one", "Feature two"],
+  "integrations": {
+    "zesty_app_sdk": true,
+    "sso_providers": ["google", "github", "microsoft"],
+    "deployment": "google_cloud_run"
+  },
+  "repository": "https://github.com/your-org/your-app"
+}
+```
+
+---
+
 ## Branch Strategy
 
 | Branch | Purpose |
