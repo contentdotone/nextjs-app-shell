@@ -107,6 +107,10 @@ npm install
 ```bash
 npm run dev
 # http://localhost:3000
+
+# Production build (type-check + compile)
+npm run build
+npm start
 ```
 
 The SDK will report `"standalone"` status when running outside an iframe. Use the manual login on `/login` to paste an `APP_SID` token for testing authenticated requests locally.
